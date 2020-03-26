@@ -8,6 +8,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     @Override
     public void init() {
         LinearChainMotor = hardwareMap.get(DcMotor.class, "LinearChain_Motor");
+        telemetry.addData("Status", "Initialized");
     }
 
     @Override
