@@ -17,7 +17,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
         int LinearChainMotorPower = Range.clip(-1.0, 1.0);;
         LinearChainMotor.setPower(LinearChainMotorPower);
     }
-    public void move(int x, int y, int z){
+    public void move(int x){
 
     }
 }
