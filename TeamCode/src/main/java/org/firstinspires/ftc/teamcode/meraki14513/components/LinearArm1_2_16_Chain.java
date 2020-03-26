@@ -3,13 +3,11 @@ package org.firstinspires.ftc.teamcode.meraki14513.components;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public final class LinearArm1_2_16_Chain extends BaseComponent {
-    DcMotor RightMotor;
-    DcMotor LeftMotor;
+    DcMotor LinearChainMotor;
 
     @Override
     public void init() {
-        RightMotor = hardwareMap.get(DcMotor.class, "Right_drive");
-        LeftMotor = hardwareMap.get(DcMotor.class, "Left_drive");
+        LinearChainMotor = hardwareMap.get(DcMotor.class, "LinearChain_Motor");
     }
 
     @Override
