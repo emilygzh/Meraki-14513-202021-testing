@@ -14,12 +14,10 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
 
     @Override
     public void loop() {
-        long incrementInput = (long) (gamepad2.right_stick_y * 50.0);
-        expand(incrementInput);
+        int LinearChainMotorPower = Range.clip(-1.0, 1.0);;
+        LinearChainMotor.setPower(LinearChainMotorPower);
     }
-
-    public void expand(long increment){
-
+    public void move(int x, int y, int z){
 
     }
 }
