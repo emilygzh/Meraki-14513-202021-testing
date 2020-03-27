@@ -6,8 +6,9 @@ import com.qualcomm.robotcore.util.Range;
 public final class LinearArm1_2_16_Chain extends BaseComponent {
     public static final long MINIMUM=3001;
     public static final long MAXIMUM=8001;
-    DcMotor LinearChainMotor;
-    private int currentPosition;
+
+    private DcMotor LinearChainMotor;
+    private long currentPosition;
 
     @Override
     public void init() {
@@ -17,17 +18,15 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
 
     @Override
     public void loop() {
-        int LinearChainMotorPower = Range.clip(-1.0, 1.0);;
-        LinearChainMotor.setPower(LinearChainMotorPower);
+
     }
 
-    public void expand(long increment){
-        currentPosition=currentPosition+increment;
-        if(currentPosition) < MINIMUM {
+    public void expand(long increment) {
+        currentPosition = currentPosition + increment;
+        if(currentPosition < MINIMUM) {
             currentPosition = MINIMUM;
-
-        } else if(currentPosition>MAXIMUM){
-            currentPosition= MAXIMUM
+        } else if(currentPosition > MAXIMUM) {
+            currentPosition = MAXIMUM;
         }
 
         LinearChainMotor.setPower(0.5);
