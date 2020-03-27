@@ -30,12 +30,11 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
         }
 
         LinearChainMotor.setPower(0.5);
-    try{
-        Thread.sleep(increment);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
+        try{
+            Thread.sleep(increment);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
         LinearChainMotor.setPower(0.0);
     }
 }
