@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.meraki14513.components;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public final class DoubleRollingHand extends BaseComponent {
-    private DcMotor motorOne;
-    private DcMotor motorTwo;
+    private Servo leftServo;
+    private Servo rightServo;
 
     @Override
     public void init() {
-        motorOne = hardwareMap.get(DcMotor.class, "left_drive");
-        motorTwo = hardwareMap.get(DcMotor.class, "right_drive");
+        leftServo = hardwareMap.get(Servo.class, "DoubleRollingHand.leftServo")
+        rightServo = hardwareMap.get(Servo.class, "DoubleRollingHand.rightServo")
     }
 
     @Override
@@ -17,12 +17,11 @@ public final class DoubleRollingHand extends BaseComponent {
 
     }
 
-    public void move(int x, int y, int z) {
+    public void open(int openPosition) {
+        leftServo.setPosition(openPosition);
+        rightServo.setPosition(-openPosition);
 
     }
 }
 
-
-/**
- * lift
 }
