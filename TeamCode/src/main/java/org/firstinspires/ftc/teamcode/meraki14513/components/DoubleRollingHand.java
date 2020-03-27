@@ -17,7 +17,7 @@ public final class DoubleRollingHand extends BaseComponent {
 
     }
 
-    public void move(int x, int y) {
+    public void move(int x, int y, int z) {
 
     }
 
