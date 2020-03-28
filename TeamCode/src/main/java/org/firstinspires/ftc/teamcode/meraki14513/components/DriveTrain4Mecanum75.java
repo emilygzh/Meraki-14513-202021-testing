@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.meraki14513.components;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,6 +15,20 @@ public final class DriveTrain4Mecanum75 extends BaseComponent {
     private DcMotor rightFrontDrive;
     private DcMotor leftRearDrive;
     private DcMotor rightRearDrive;
+
+    /**
+     * Constructor for FTC container
+     */
+    public DriveTrain4Mecanum75() { }
+
+    /**
+     * Constructor for parent host
+     * @param parentOpMode
+     */
+    public DriveTrain4Mecanum75(OpMode parentOpMode) {
+        super.initByParent(parentOpMode);
+        init();
+    }
 
     /**
      * Setup hardware mappings
@@ -43,7 +58,7 @@ public final class DriveTrain4Mecanum75 extends BaseComponent {
     public void loop() {
         move((int)gamepad1.left_stick_x * 10, (int)gamepad1.left_stick_y * 10);
         turn((int)gamepad1.left_trigger * 10); // turn left
-        turn((int)gamepad1.right_trigger * 10); // turn right
+        turn((int)gamepad1.right_trigger * -10); // turn right
     }
 
     /**
