@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Completed driver code for chain drive train
  */
 
-@TeleOp(name="DriveTrain2Chain", group="Meraki 14513")
-public class DriveTrain2Chain extends BaseComponent{
+@TeleOp(name="DriveTrain2Chain90", group="Meraki 14513")
+public class DriveTrain2Chain90 extends BaseComponent{
     private DcMotor leftDrive;
     private DcMotor rightDrive;
 
@@ -18,8 +18,8 @@ public class DriveTrain2Chain extends BaseComponent{
     public void init() {
         telemetry.addData("Status: ", "Initialized");
 
-        leftDrive = hardwareMap.get(DcMotor.class, "LeftDrive");
-        rightDrive = hardwareMap.get(DcMotor.class, "RightDrive");
+        leftDrive = hardwareMap.get(DcMotor.class, "Chain90.LeftDrive");
+        rightDrive = hardwareMap.get(DcMotor.class, "Chain90RightDrive");
         leftDrive.setPower(0.0);
         rightDrive.setPower(0.0);
 
