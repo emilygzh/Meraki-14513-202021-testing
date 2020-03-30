@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.meraki14513.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 public final class LinearArm1_2_16_Chain extends BaseComponent {
@@ -13,11 +14,14 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     @Override
     public void init() {
         LinearChainMotor = hardwareMap.get(DcMotor.class, "LinearChain_Motor");
+        LinearChainMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        LinearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         telemetry.addData("Status", "Initialized");
     }
 
     @Override
     public void loop() {
+        expand((int)gamepad2.right_stick_y * 10);
 
     }
 
