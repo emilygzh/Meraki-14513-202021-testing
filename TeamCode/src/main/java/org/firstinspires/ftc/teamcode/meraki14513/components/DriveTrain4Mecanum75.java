@@ -49,6 +49,11 @@ public final class DriveTrain4Mecanum75 extends BaseComponent {
         rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftRearDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        leftFrontDrive.setPower(0.7);
+        rightFrontDrive.setPower(0.7);
+        leftRearDrive.setPower(0.7);
+        rightRearDrive.setPower(0.7);
     }
 
     /**
