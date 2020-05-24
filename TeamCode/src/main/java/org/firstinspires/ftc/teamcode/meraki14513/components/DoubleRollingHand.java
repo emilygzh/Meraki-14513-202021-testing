@@ -23,5 +23,3 @@ public final class DoubleRollingHand extends BaseComponent {
 
     }
 }
-
-}
