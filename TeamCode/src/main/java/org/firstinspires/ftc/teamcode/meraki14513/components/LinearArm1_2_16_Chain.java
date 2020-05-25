@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="LinearArm1_2_16_Chain", group="Meraki 14513")
 public final class LinearArm1_2_16_Chain extends BaseComponent {
-    public static final int MINIMUM=3001;
-    public static final int MAXIMUM=8001;
+    public static final int MINIMUM = 0;
+    public static final int MAXIMUM = 8001;
 
     private DcMotor LinearChainMotor;
     private int currentPosition;
@@ -16,8 +16,8 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     @Override
     public void init() {
         LinearChainMotor = hardwareMap.get(DcMotor.class, "LinearArm1_Motor");
-        LinearChainMotor.setTargetPosition(MINIMUM);
-        LinearChainMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        LinearChainMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LinearChainMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LinearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         currentPosition = LinearChainMotor.getCurrentPosition();
         telemetry.addData("Status", "Initialized");
@@ -39,6 +39,13 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
         }
 
         LinearChainMotor.setTargetPosition(currentPosition);
+        LinearChainMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        LinearChainMotor.setPower(0.5);
+        while (LinearChainMotor.isBusy()) {
+            telemetry.addData("currentposition", LinearChainMotor.getCurrentPosition());
+        }
+        LinearChainMotor.setPower(0.0);
+        LinearChainMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        if (increment > 0) {
 //            LinearChainMotor.setPower(0.5);
 //        } else if (increment < 0) {
