@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="LinearArm1_2_16_Chain", group="Meraki 14513")
 public final class LinearArm1_2_16_Chain extends BaseComponent {
     public static final int MINIMUM = 0;
-    public static final int MAXIMUM = 8001;
+    public static final int MAXIMUM = 1200;
 
     private DcMotor LinearChainMotor;
     private int currentPosition;
@@ -25,7 +25,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
 
     @Override
     public void loop() {
-        expand((int)gamepad2.right_stick_y * 10);
+        expand((int)gamepad2.right_stick_y * 30);
         telemetry.addData("gamepad2.right_stick_y", gamepad2.right_stick_y);
     }
 
@@ -40,7 +40,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
 
         LinearChainMotor.setTargetPosition(currentPosition);
         LinearChainMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        LinearChainMotor.setPower(0.5);
+        LinearChainMotor.setPower(1.0);
         while (LinearChainMotor.isBusy()) {
             telemetry.addData("currentposition", LinearChainMotor.getCurrentPosition());
         }
