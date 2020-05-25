@@ -16,6 +16,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     @Override
     public void init() {
         LinearChainMotor = hardwareMap.get(DcMotor.class, "LinearArm1_Motor");
+        LinearChainMotor.setTargetPosition(MINIMUM);
         LinearChainMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         LinearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         currentPosition = LinearChainMotor.getCurrentPosition();
@@ -36,7 +37,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
         } else if(currentPosition > MAXIMUM) {
             currentPosition = MAXIMUM;
         }
-       
+
         LinearChainMotor.setTargetPosition(currentPosition);
 //        if (increment > 0) {
 //            LinearChainMotor.setPower(0.5);
