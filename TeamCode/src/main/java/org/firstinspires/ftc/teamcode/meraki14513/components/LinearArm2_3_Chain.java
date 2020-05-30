@@ -24,7 +24,7 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         leftMotor.setPower(0.0);
         leftPosition = leftMotor.getCurrentPosition();
 
-        rightMotor = hardwareMap.get(DcMotor.class, "LinearArmLeft");
+        rightMotor = hardwareMap.get(DcMotor.class, "LinearArmRight");
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -37,10 +37,21 @@ public final class LinearArm2_3_Chain extends BaseComponent {
     @Override
     public void loop() {
         expandTogether((int)gamepad2.left_stick_y * 30);
-        telemetry.addData("gamepad2.right_stick_y", gamepad2.right_stick_y);
+        if(gamepad2.left_bumper) {
+            expandSeparate(-5, true);
+        }
+        if(gamepad2.right_bumper) {
+            expandSeparate(-5, false);
+        }
+        expandSeparate((int)gamepad2.left_trigger*10, true);
+        expandSeparate((int)gamepad2.right_trigger*10, false);
+        telemetry.addData("gamepad2.right_stick_y", gamepad2.left_stick_y);
     }
 
     public void expandTogether(int increment) {
+        if(increment < 1) {
+            return;
+        }
         leftPosition = leftPosition + increment;
         telemetry.addData("Target position: ", leftPosition);
         if(leftPosition < MINIMUM) {
@@ -66,5 +77,36 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         rightMotor.setPower(0.0);
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void expandSeparate(int increment, boolean expandLeft) {
+        if (increment < 1){
+            return;
+        }
+        DcMotor expandMotor;
+        if(expandLeft) {
+            expandMotor = leftMotor;
+        }
+        else{
+            expandMotor = rightMotor;
+        }
+        int targetPosition = expandMotor.getCurrentPosition() + increment;
+        telemetry.addData("Target position: ", targetPosition);
+        if(targetPosition < MINIMUM) {
+            targetPosition = MINIMUM;
+        } else if(targetPosition > MAXIMUM) {
+            targetPosition = MAXIMUM;
+        }
+
+        expandMotor.setTargetPosition(targetPosition);
+        expandMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        expandMotor.setPower(1.0);
+
+        while (expandMotor.isBusy()) {
+            telemetry.addData("Current position", expandMotor.getCurrentPosition());
+        }
+        expandMotor.setPower(0.0);
+        expandMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
