@@ -8,8 +8,8 @@ public final class DoubleRollingHand extends BaseComponent {
 
     @Override
     public void init() {
-        leftServo = hardwareMap.get(Servo.class, "DoubleRollingHand.leftServo")
-        rightServo = hardwareMap.get(Servo.class, "DoubleRollingHand.rightServo")
+        leftServo = hardwareMap.get(Servo.class, "DoubleRollingHand.leftServo");
+        rightServo = hardwareMap.get(Servo.class, "DoubleRollingHand.rightServo");
     }
 
     @Override
