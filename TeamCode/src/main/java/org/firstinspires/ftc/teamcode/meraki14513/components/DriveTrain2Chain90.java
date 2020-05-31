@@ -16,34 +16,38 @@ public class DriveTrain2Chain90 extends BaseComponent{
 
     @Override
     public void init() {
-        telemetry.addData("Status: ", "Initialized");
-
-        leftDrive = hardwareMap.get(DcMotor.class, "Chain90.LeftDrive");
-        rightDrive = hardwareMap.get(DcMotor.class, "Chain90RightDrive");
+        leftDrive = hardwareMap.get(DcMotor.class, "Chain90_LeftDrive");
+        rightDrive = hardwareMap.get(DcMotor.class, "Chain90_RightDrive");
         leftDrive.setPower(0.0);
         rightDrive.setPower(0.0);
 
-        telemetry.addData("Status", "Initialized");
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        telemetry.addData("Status: ", "Initialized");
     }
 
     @Override
     public void loop() {
+        telemetry.addData("Status", "LOOP : " + gamepad1.left_stick_y);
+
         move((int) (gamepad1.left_stick_y * 10));
         turn((int) (gamepad1.left_trigger * 10));
         turn((int) (gamepad1.right_trigger * -10));
     }
 
     public void move(int forwardBackwardIncrement) {
-        leftDrive.setTargetPosition(leftDrive.getCurrentPosition() + forwardBackwardIncrement);
+        telemetry.addData("Status", "MOVE : " + forwardBackwardIncrement);
 
-        int rightCurrent = rightDrive.getCurrentPosition();
-        int rightTarget = rightCurrent + forwardBackwardIncrement;
-        rightDrive.setTargetPosition(rightTarget);
+        leftDrive.setPower(((float)forwardBackwardIncrement)/10.0);
+        rightDrive.setPower(((float)forwardBackwardIncrement)/10.0);
+//        leftDrive.setTargetPosition(leftDrive.getCurrentPosition() + forwardBackwardIncrement);
+//
+//        int rightCurrent = rightDrive.getCurrentPosition();
+//        int rightTarget = rightCurrent + forwardBackwardIncrement;
+//        rightDrive.setTargetPosition(rightTarget);
 }
 
     public void turn(int LeftRightIncrement) {
