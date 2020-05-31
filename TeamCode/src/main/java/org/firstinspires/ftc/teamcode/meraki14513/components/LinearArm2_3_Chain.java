@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="LinearArm2_3_Chain", group="Meraki 14513")
-public final class LinearArm2_3_Chain extends BaseComponent {
+public final class LinearArm2_3_Chain extends BaseComponent {       
     public static final int MINIMUM = 0;
     public static final int MAXIMUM = 1200;
 
