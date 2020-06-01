@@ -28,7 +28,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     }
 
     public void expand(int increment) {
-        if(increment < 1 || increment > -1) {
+        if(increment < 1 && increment > -1) {
             linearChainMotor.setPower(0.0);
         } else {
             if (increment > 0) {
