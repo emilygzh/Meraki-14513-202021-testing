@@ -32,9 +32,9 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
             linearChainMotor.setPower(0.0);
         } else {
             if (increment > 0) {
-                linearChainMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-            } else {
                 linearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            } else {
+                linearChainMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             }
             currentPosition = currentPosition + increment;
             telemetry.addData("position: ", currentPosition);
