@@ -17,7 +17,6 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
         linearChainMotor = hardwareMap.get(DcMotor.class, "LinearArm1_Motor");
         linearChainMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearChainMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        linearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         currentPosition = linearChainMotor.getCurrentPosition();
         telemetry.addData("Status", "Initialized");
     }
@@ -29,9 +28,14 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     }
 
     public void expand(int increment) {
-        if(increment < 1) {
+        if(increment < 1 || increment > -1) {
             linearChainMotor.setPower(0.0);
         } else {
+            if (increment > 0) {
+                linearChainMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+            } else {
+                linearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            }
             currentPosition = currentPosition + increment;
             telemetry.addData("position: ", currentPosition);
             if (currentPosition < MINIMUM) {
