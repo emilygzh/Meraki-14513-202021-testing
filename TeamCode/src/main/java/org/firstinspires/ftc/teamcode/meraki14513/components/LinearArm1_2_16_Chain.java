@@ -42,15 +42,18 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
             telemetry.addData("set power 0.0", increment);
             return;
         }
-        
+
         int targetMotorPosition = linearChainMotor.getCurrentPosition() + realIncrement;
         linearChainMotor.setTargetPosition(targetMotorPosition);
         linearChainMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(realIncrement > 0) {
             linearChainMotor.setPower(1.0);
         }
-        else{
+        else if (realIncrement < 0){
             linearChainMotor.setPower(-1.0);
+        }
+        else{
+            linearChainMotor.setPower(0.0);
         }
         while (linearChainMotor.isBusy()) {
             telemetry.addData("currentPosition", linearChainMotor.getCurrentPosition());
