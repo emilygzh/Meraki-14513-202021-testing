@@ -10,14 +10,14 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     public static final int MAXIMUM = 1200;
 
     private DcMotor linearChainMotor;
-    private int currentPosition;
+    private int armPosition;
 
     @Override
     public void init() {
         linearChainMotor = hardwareMap.get(DcMotor.class, "LinearArm1_Motor");
         linearChainMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearChainMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        currentPosition = linearChainMotor.getCurrentPosition();
+        armPosition = MINIMUM;
         telemetry.addData("Status", "Initialized");
     }
 
@@ -32,26 +32,28 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
             linearChainMotor.setPower(0.0);
             telemetry.addData("set power 0.0", increment);
         } else {
-            if (increment > 0) {
+            int targetArmPosition = armPosition + increment;
+            telemetry.addData("armPosition: ", armPosition);
+            if (targetArmPosition < MINIMUM) {
+                targetArmPosition = MINIMUM;
+            } else if (targetArmPosition > MAXIMUM) {
+                targetArmPosition = MAXIMUM;
+            }
+            int realIncrement = targetArmPosition - armPosition;
+            if (realIncrement > 0) {
                 linearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
             } else {
                 linearChainMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             }
-            currentPosition = currentPosition + increment;
-            telemetry.addData("position: ", currentPosition);
-            if (currentPosition < MINIMUM) {
-                currentPosition = MINIMUM;
-            } else if (currentPosition > MAXIMUM) {
-                currentPosition = MAXIMUM;
-            }
-
-            linearChainMotor.setTargetPosition(currentPosition);
+            int targetMotorPosition = linearChainMotor.getCurrentPosition() + Math.abs(realIncrement);
+            linearChainMotor.setTargetPosition(targetMotorPosition);
             linearChainMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearChainMotor.setPower(1.0);
             while (linearChainMotor.isBusy()) {
-                telemetry.addData("currentposition", linearChainMotor.getCurrentPosition());
+                telemetry.addData("currentPosition", linearChainMotor.getCurrentPosition());
             }
             linearChainMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            armPosition = targetArmPosition;
         }
     }
 }
