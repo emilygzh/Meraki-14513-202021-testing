@@ -30,6 +30,7 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
     public void expand(int increment) {
         if(increment < 1 && increment > -1) {
             linearChainMotor.setPower(0.0);
+            telemetry.addData("set power 0.0", increment);
         } else {
             if (increment > 0) {
                 linearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
