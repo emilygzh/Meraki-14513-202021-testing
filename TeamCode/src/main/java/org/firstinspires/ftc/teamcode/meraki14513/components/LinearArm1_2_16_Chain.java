@@ -23,26 +23,27 @@ public final class LinearArm1_2_16_Chain extends BaseComponent {
 
     @Override
     public void loop() {
-        expand((int)gamepad2.right_stick_y * 30);
+        expand((int)-gamepad2.right_stick_y * 30);
         telemetry.addData("gamepad2.right_stick_y", gamepad2.right_stick_y);
     }
 
     public void expand(int increment) {
-        if(increment < 1 && increment > -1) {
+        int targetArmPosition = armPosition + increment;
+        telemetry.addData("armPosition: ", armPosition);
+        if (targetArmPosition < MINIMUM) {
+            targetArmPosition = MINIMUM;
+        } else if (targetArmPosition > MAXIMUM) {
+            targetArmPosition = MAXIMUM;
+        }
+        int realIncrement = targetArmPosition - armPosition;
+
+        if(realIncrement < 1 && realIncrement > -1) {
             linearChainMotor.setPower(0.0);
             telemetry.addData("set power 0.0", increment);
         } else {
-            int targetArmPosition = armPosition + increment;
-            telemetry.addData("armPosition: ", armPosition);
-            if (targetArmPosition < MINIMUM) {
-                targetArmPosition = MINIMUM;
-            } else if (targetArmPosition > MAXIMUM) {
-                targetArmPosition = MAXIMUM;
-            }
-            int realIncrement = targetArmPosition - armPosition;
             if (realIncrement > 0) {
                 linearChainMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            } else {
+            } else if (realIncrement < 0){
                 linearChainMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             }
             int targetMotorPosition = linearChainMotor.getCurrentPosition() + Math.abs(realIncrement);
