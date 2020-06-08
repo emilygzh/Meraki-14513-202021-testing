@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.meraki14513.components;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="LinearArm2_3_Chain", group="Meraki 14513")
-public final class LinearArm2_3_Chain extends BaseComponent {       
+public final class LinearArm2_3_16_Chain extends BaseComponent {
     public static final int MINIMUM = 0;
     public static final int MAXIMUM = 1200;
 
@@ -48,6 +47,46 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         telemetry.addData("gamepad2.right_stick_y", gamepad2.left_stick_y);
     }
 
+    public void expandTogether(int targetMotorPosition) {
+        if (targetMotorPosition < MINIMUM) {
+            targetMotorPosition = MINIMUM;
+        } else if (targetMotorPosition > MAXIMUM) {
+            targetMotorPosition = MAXIMUM;
+        }
+        int realIncrement = targetMotorPosition - leftMotor.getCurrentPosition();
+        if(realIncrement > 0) {
+            leftMotor.setPower(1.0);
+        }
+        else if (realIncrement < 0) {
+            leftMotor.setPower(-1.0);
+        }
+        else {
+            leftMotor.setPower(0.0);
+            return;
+        }
+        int realIncrement = targetMotorPosition - rightMotor.getCurrentPosition();
+        if(realIncrement > 0) {
+            rightMotor.setPower(1.0);
+        }
+        else if (realIncrement < 0) {
+            rightMotor.setPower(-1.0);
+        }
+        else {
+            rightMotor.setPower(0.0);
+            return;
+        }
+        leftMotor.setTargetPosition(targetMotorPosition);
+        rightMotor.setTargetPosition(targetMotorPosition);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (leftMotor.isBusy() || rightMotor.isBusy()) {
+            telemetry.addData("Current position",
+                    leftMotor.getCurrentPosition() + " | " + rightMotor.getCurrentPosition());
+        }
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
     public void expandTogether(int increment) {
         if(increment < 1) {
             return;
@@ -77,6 +116,11 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         rightMotor.setPower(0.0);
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void expandSeparate(int increment) {
+        expandTogether(leftMotor.getCurrentPosition() + increment);
+        expandTogether(rightMotor.getCurrentPosition() + increment);
     }
 
     public void expandSeparate(int increment, boolean expandLeft) {
