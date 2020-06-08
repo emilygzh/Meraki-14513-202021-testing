@@ -118,9 +118,8 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void expandSeparate(int increment) {
-        expandTogether(leftMotor.getCurrentPosition() + increment);
-        expandTogether(rightMotor.getCurrentPosition() + increment);
+    public void expandSeparate(int targetMotorPosition) {
+
     }
 
     public void expandSeparate(int increment, boolean expandLeft) {
