@@ -47,51 +47,8 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
         telemetry.addData("gamepad2.right_stick_y", gamepad2.left_stick_y);
     }
 
-    public void expandTogether(int targetMotorPosition) {
-        if (targetMotorPosition < MINIMUM) {
-            targetMotorPosition = MINIMUM;
-        } else if (targetMotorPosition > MAXIMUM) {
-            targetMotorPosition = MAXIMUM;
-        }
-        int realIncrement = targetMotorPosition - leftMotor.getCurrentPosition();
-        if(realIncrement > 0) {
-            leftMotor.setPower(1.0);
-        }
-        else if (realIncrement < 0) {
-            leftMotor.setPower(-1.0);
-        }
-        else {
-            leftMotor.setPower(0.0);
-            return;
-        }
-        int realIncrement = targetMotorPosition - rightMotor.getCurrentPosition();
-        if(realIncrement > 0) {
-            rightMotor.setPower(1.0);
-        }
-        else if (realIncrement < 0) {
-            rightMotor.setPower(-1.0);
-        }
-        else {
-            rightMotor.setPower(0.0);
-            return;
-        }
-        leftMotor.setTargetPosition(targetMotorPosition);
-        rightMotor.setTargetPosition(targetMotorPosition);
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while (leftMotor.isBusy() || rightMotor.isBusy()) {
-            telemetry.addData("Current position",
-                    leftMotor.getCurrentPosition() + " | " + rightMotor.getCurrentPosition());
-        }
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void expandTogether(int increment) {
-        if(increment < 1) {
-            return;
-        }
-        leftPosition = leftPosition + increment;
+    public void expandToTogether(int targetPosition) {
+        DcMotor expandMotor;
         telemetry.addData("Target position: ", leftPosition);
         if(leftPosition < MINIMUM) {
             leftPosition = MINIMUM;
@@ -99,47 +56,6 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
             leftPosition = MAXIMUM;
         }
         rightPosition = leftPosition;
-
-        leftMotor.setTargetPosition(leftPosition);
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setTargetPosition(rightPosition);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftMotor.setPower(1.0);
-        rightMotor.setPower(1.0);
-
-        while (leftMotor.isBusy() || rightMotor.isBusy()) {
-            telemetry.addData("Current position",
-                    leftMotor.getCurrentPosition() + " | " + rightMotor.getCurrentPosition());
-        }
-        leftMotor.setPower(0.0);
-        rightMotor.setPower(0.0);
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void expandSeparate(int targetMotorPosition) {
-
-    }
-
-    public void expandSeparate(int increment, boolean expandLeft) {
-        if (increment < 1){
-            return;
-        }
-        DcMotor expandMotor;
-        if(expandLeft) {
-            expandMotor = leftMotor;
-        }
-        else{
-            expandMotor = rightMotor;
-        }
-        int targetPosition = expandMotor.getCurrentPosition() + increment;
-        telemetry.addData("Target position: ", targetPosition);
-        if(targetPosition < MINIMUM) {
-            targetPosition = MINIMUM;
-        } else if(targetPosition > MAXIMUM) {
-            targetPosition = MAXIMUM;
-        }
 
         expandMotor.setTargetPosition(targetPosition);
         expandMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -151,5 +67,55 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
         }
         expandMotor.setPower(0.0);
         expandMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void expandByTogether(int increment) {
+        DcMotor expandMotor;
+        leftPosition = leftPosition + increment;
+        telemetry.addData("Target position: ", leftPosition);
+        if(leftPosition < MINIMUM) {
+            leftPosition = MINIMUM;
+        } else if(leftPosition > MAXIMUM) {
+            leftPosition = MAXIMUM;
+        }
+        rightPosition = leftPosition;
+        expandToSeparate(expandMotor.getCurrentPosition() + increment, expandMotor);
+    }
+
+    public void expandToSeparate(int targetPosition, boolean expandLeft) {
+        DcMotor expandMotor;
+        if(expandLeft) {
+            expandMotor = leftMotor;
+        }
+        else{
+            expandMotor = rightMotor;
+        }
+        telemetry.addData("Target position: ", targetPosition);
+        if(targetPosition < MINIMUM) {
+            targetPosition = MINIMUM;
+        } else if(targetPosition > MAXIMUM) {
+            targetPosition = MAXIMUM;
+        }
+        expandMotor.setTargetPosition(targetPosition);
+        expandMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        expandMotor.setPower(1.0);
+
+        while (expandMotor.isBusy()) {
+            telemetry.addData("Current position", expandMotor.getCurrentPosition());
+        }
+        expandMotor.setPower(0.0);
+        expandMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void expandBySeparate(int increment, boolean expandLeft) {
+        DcMotor expandMotor;
+        if(expandLeft) {
+            expandMotor = leftMotor;
+        }
+        else{
+            expandMotor = rightMotor;
+        }
+        expandToSeparate(expandMotor.getCurrentPosition() + increment, expandLeft);
     }
 }
