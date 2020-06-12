@@ -48,38 +48,33 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
     }
 
     public void expandToTogether(int targetPosition) {
-        DcMotor expandMotor;
-        telemetry.addData("Target position: ", leftPosition);
-        if(leftPosition < MINIMUM) {
-            leftPosition = MINIMUM;
-        } else if(leftPosition > MAXIMUM) {
-            leftPosition = MAXIMUM;
+        telemetry.addData("Target position: ", targetPosition);
+        if (targetPosition < MINIMUM) {
+            targetPosition = MINIMUM;
+        } else if (targetPosition > MAXIMUM) {
+            targetPosition = MAXIMUM;
         }
-        rightPosition = leftPosition;
+        leftMotor.setTargetPosition(targetPosition);
+        rightMotor.setTargetPosition(targetPosition);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        expandMotor.setTargetPosition(targetPosition);
-        expandMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotor.setPower(1.0);
+        rightMotor.setPower(1.0);
 
-        expandMotor.setPower(1.0);
-
-        while (expandMotor.isBusy()) {
-            telemetry.addData("Current position", expandMotor.getCurrentPosition());
+        while (leftMotor.isBusy() || rightMotor.isBusy()) {
+            telemetry.addData("Left position", leftMotor.getCurrentPosition());
+            telemetry.addData("Right position", rightMotor.getCurrentPosition());
         }
-        expandMotor.setPower(0.0);
-        expandMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotor.setPower(0.0);
+        rightMotor.setPower(0.0);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void expandByTogether(int increment) {
-        DcMotor expandMotor;
-        leftPosition = leftPosition + increment;
-        telemetry.addData("Target position: ", leftPosition);
-        if(leftPosition < MINIMUM) {
-            leftPosition = MINIMUM;
-        } else if(leftPosition > MAXIMUM) {
-            leftPosition = MAXIMUM;
-        }
-        rightPosition = leftPosition;
-        expandToSeparate(expandMotor.getCurrentPosition() + increment, expandMotor);
+        expandByTogether(leftMotor.getCurrentPosition() + increment);
+        expandByTogether(rightMotor.getCurrentPosition() + increment);
     }
 
     public void expandToSeparate(int targetPosition, boolean expandLeft) {
