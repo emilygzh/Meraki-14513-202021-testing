@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.meraki14513.components;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="LinearArm2_3_Chain", group="Meraki 14513")
-public final class LinearArm2_3_Chain extends BaseComponent {       
+public final class LinearArm2_3_16_Chain extends BaseComponent {
     public static final int MINIMUM = 0;
     public static final int MAXIMUM = 1200;
 
@@ -48,30 +47,24 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         telemetry.addData("gamepad2.right_stick_y", gamepad2.left_stick_y);
     }
 
-    public void expandTogether(int increment) {
-        if(increment < 1) {
-            return;
+    public void expandToTogether(int targetPosition) {
+        telemetry.addData("Target position: ", targetPosition);
+        if (targetPosition < MINIMUM) {
+            targetPosition = MINIMUM;
+        } else if (targetPosition > MAXIMUM) {
+            targetPosition = MAXIMUM;
         }
-        leftPosition = leftPosition + increment;
-        telemetry.addData("Target position: ", leftPosition);
-        if(leftPosition < MINIMUM) {
-            leftPosition = MINIMUM;
-        } else if(leftPosition > MAXIMUM) {
-            leftPosition = MAXIMUM;
-        }
-        rightPosition = leftPosition;
-
-        leftMotor.setTargetPosition(leftPosition);
+        leftMotor.setTargetPosition(targetPosition);
+        rightMotor.setTargetPosition(targetPosition);
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setTargetPosition(rightPosition);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         leftMotor.setPower(1.0);
         rightMotor.setPower(1.0);
 
         while (leftMotor.isBusy() || rightMotor.isBusy()) {
-            telemetry.addData("Current position",
-                    leftMotor.getCurrentPosition() + " | " + rightMotor.getCurrentPosition());
+            telemetry.addData("Left position", leftMotor.getCurrentPosition());
+            telemetry.addData("Right position", rightMotor.getCurrentPosition());
         }
         leftMotor.setPower(0.0);
         rightMotor.setPower(0.0);
@@ -79,10 +72,12 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void expandSeparate(int increment, boolean expandLeft) {
-        if (increment < 1){
-            return;
-        }
+    public void expandByTogether(int increment) {
+        expandByTogether(leftMotor.getCurrentPosition() + increment);
+        expandByTogether(rightMotor.getCurrentPosition() + increment);
+    }
+
+    public void expandToSeparate(int targetPosition, boolean expandLeft) {
         DcMotor expandMotor;
         if(expandLeft) {
             expandMotor = leftMotor;
@@ -90,14 +85,12 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         else{
             expandMotor = rightMotor;
         }
-        int targetPosition = expandMotor.getCurrentPosition() + increment;
         telemetry.addData("Target position: ", targetPosition);
         if(targetPosition < MINIMUM) {
             targetPosition = MINIMUM;
         } else if(targetPosition > MAXIMUM) {
             targetPosition = MAXIMUM;
         }
-
         expandMotor.setTargetPosition(targetPosition);
         expandMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -108,5 +101,16 @@ public final class LinearArm2_3_Chain extends BaseComponent {
         }
         expandMotor.setPower(0.0);
         expandMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void expandBySeparate(int increment, boolean expandLeft) {
+        DcMotor expandMotor;
+        if(expandLeft) {
+            expandMotor = leftMotor;
+        }
+        else{
+            expandMotor = rightMotor;
+        }
+        expandToSeparate(expandMotor.getCurrentPosition() + increment, expandLeft);
     }
 }
