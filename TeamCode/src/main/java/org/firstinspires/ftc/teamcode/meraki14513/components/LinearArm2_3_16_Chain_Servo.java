@@ -30,14 +30,14 @@ public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
             if(gamepad2.right_stick_x < 0.0) {
                 power = -1.0;
             }
-            expandBy(power, milliseconds);
+            expandByTogether(power, milliseconds);
         }
         else if(gamepad2.b) {
-            expandBy(1.0, 2000);
+            expandByTogether(1.0, 2000);
             // maximum positive power and time
         }
         else if(gamepad2.x) {
-            expandBy(-1.0, 2000);
+            expandByTogether(-1.0, 2000);
             // maximum negative power and time
         }
         else {
@@ -46,24 +46,14 @@ public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
         telemetry.addData("gamepad2.right_stick_y", gamepad2.right_stick_y);
     }
 
-    public void expandBy(double power, int milliseconds) {
-        double target = power*milliseconds;
-        if(target > MAXIMUM) {
-            target = MAXIMUM;
-        }
-        else if(target < MINIMUM) {
-            target = MINIMUM;
-        }
+    public void expandByTogether(double power, int milliseconds) {
         milliseconds = (int)(target/power);
         ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         leftServo.setPower(power);
-        while(timer.milliseconds() < milliseconds) {
-            telemetry.addData("timer", timer.milliseconds());
-        }
-        counter += power*milliseconds;
+        rightServo.setPower(power);
     }
 
     public void stop() {
-        oneServo.setPower(0.0);
+        CRServo.setPower(0.0);
     }
 }
