@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.meraki14513.components;
 
-        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-        import com.qualcomm.robotcore.hardware.CRServo;
-        import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Catapult", group="Meraki 14513")
-public class Catapult extends BaseComponent{
+public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
 
     public static final double MINIMUM = 0.0;
     public static final double MAXIMUM = 2500.0;
