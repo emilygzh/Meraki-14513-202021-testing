@@ -29,7 +29,7 @@ public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
     public void loop() {
         // change these controls to proper ones to avoid simultaneous moving of arms
         if(gamepad2.right_stick_x != 0.0) {
-            int milliseconds = (int) Math.abs(gamepad2.right_stick_x * 100);
+            int milliseconds = (int) Math.abs(gamepad2.left_stick_button * 100);
             double power = 1.0;
             if(gamepad2.right_stick_x < 0.0) {
                 power = -1.0;
