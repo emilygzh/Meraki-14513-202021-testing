@@ -17,8 +17,11 @@ public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
     public void init() {
         leftServo = hardwareMap.get(CRServo.class, "LeftArmServo");
         leftServo.setDirection(CRServo.Direction.FORWARD);
+        leftServo.setPower(0.0);
         rightServo = hardwareMap.get(CRServo.class, "RightArmServo");
         rightServo.setDirection(CRServo.Direction.FORWARD);
+        rightServo.setPower(0.0);
+        // reverse?
         telemetry.addData("Status", "Initialized");
     }
 
