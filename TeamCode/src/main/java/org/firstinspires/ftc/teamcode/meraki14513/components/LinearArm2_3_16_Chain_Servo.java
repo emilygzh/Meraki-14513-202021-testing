@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.meraki14513.components;
 
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
         import com.qualcomm.robotcore.hardware.CRServo;
-        import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Catapult", group="Meraki 14513")
 public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
