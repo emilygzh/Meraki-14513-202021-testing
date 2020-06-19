@@ -6,12 +6,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Catapult", group="Meraki 14513")
 public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
-
-    public static final double MINIMUM = 0.0;
-    public static final double MAXIMUM = 2500.0;
-
-    private CRServo oneServo;
-    private double counter;
+    private CRServo leftServo;
+    private CRServo rightServo;
 
     @Override
     public void init() {
