@@ -25,7 +25,7 @@ public class DriveTrain2Chain90 extends BaseComponent {
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry.addData("Status: ", "Initialized");
     }
@@ -34,22 +34,22 @@ public class DriveTrain2Chain90 extends BaseComponent {
     public void loop() {
         telemetry.addData("Status", "LOOP : " + gamepad1.left_stick_y);
 
+        int scale = 300;
+
         if (gamepad1.left_stick_y != 0.0) {
-            moveByTime(100, gamepad1.left_stick_y);
+            moveByTime(100, -gamepad1.left_stick_y, gamepad1.left_stick_y);
         } else if (gamepad1.left_trigger > 0.0){
-            int leftIncrement = (int) (gamepad1.left_trigger * 10);
-            moveByIncrement(leftIncrement, -leftIncrement, gamepad1.left_trigger);
+            moveByTime(100, 0.0, -gamepad1.left_trigger);
         } else if (gamepad1.right_trigger > 0.0){
-            int rightIncrement = (int) (gamepad1.right_trigger * 10);
-            moveByIncrement(-rightIncrement, rightIncrement, gamepad1.right_trigger);
-        } else if (gamepad1.dpad_up) {
-            moveByIncrement(10, 10, 0.5);
+            moveByTime(100, gamepad1.right_trigger, 0.0);
         } else if (gamepad1.dpad_down) {
-            moveByIncrement(-10, -10, -0.5);
+            moveByIncrement(scale, -scale, 1.0);
+        } else if (gamepad1.dpad_up) {
+            moveByIncrement(-scale, scale, 1.0);
         } else if (gamepad1.left_bumper) {
-            moveByIncrement(10, -10, 0.5);
+            moveByIncrement(0, scale, 1.0);
         } else if (gamepad1.right_bumper) {
-            moveByIncrement(-10, 10, 0.5);
+            moveByIncrement(-scale, 0, 1.0);
         } else {
             leftDrive.setPower(0.0);
             rightDrive.setPower(0.0);
@@ -85,11 +85,11 @@ public class DriveTrain2Chain90 extends BaseComponent {
         }
     }
 
-    public void moveByTime(long milliseconds, double power) {
+    public void moveByTime(long milliseconds, double leftPower, double rightPower) {
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftDrive.setPower(power);
-        rightDrive.setPower(power);
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
         ElapsedTime millitime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         while (millitime.milliseconds() < milliseconds) {
             telemetry.addData("millitime", millitime.milliseconds());
