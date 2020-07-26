@@ -50,6 +50,7 @@ public class LinearArm2_3_16_Chain_Servo extends BaseComponent{
     }
 
     public void stop() {
-        CRServo.setPower(0.0);
+        leftServo.setPower(0.0);
+        rightServo.setPower(0.0);
     }
 }
