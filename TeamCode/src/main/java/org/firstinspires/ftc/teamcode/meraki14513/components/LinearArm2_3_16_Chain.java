@@ -35,16 +35,32 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
 
     @Override
     public void loop() {
-        /*expandTogether((int)gamepad2.left_stick_y * 30);
+        if(gamepad2.right_stick_y) {
+            expandByTogether(//increment)
+        }
+        if(gamepad2.y) {
+            expandToTogether(MAXIMUM)
+        }
+        if(gamepad2.a) {
+            expandToTogether(MINIMUM)
+        }
+        //expandTogether((int)gamepad2.left_stick_y * 30);
+
         if(gamepad2.left_bumper) {
             expandSeparate(-5, true);
         }
         if(gamepad2.right_bumper) {
             expandSeparate(-5, false);
         }
-        expandSeparate((int)gamepad2.left_trigger*10, true);
-        expandSeparate((int)gamepad2.right_trigger*10, false);
-        telemetry.addData("gamepad2.right_stick_y", gamepad2.left_stick_y);*/
+        if gamepad2.left_trigger {
+            expandBySeparate(expandLeft);
+        }
+        if gamepad2.right_trigger {
+            expandBySeparate();
+        }
+       // expandSeparate((int)gamepad2.left_trigger*10, true);
+        //expandSeparate((int)gamepad2.right_trigger*10, false);
+
     }
 
     public void expandToTogether(int targetPosition) {
