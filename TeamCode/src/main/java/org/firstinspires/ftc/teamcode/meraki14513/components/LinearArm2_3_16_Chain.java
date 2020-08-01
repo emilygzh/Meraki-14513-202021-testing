@@ -35,7 +35,7 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
 
     @Override
     public void loop() {
-        if(gamepad2.right_stick_y) {
+        if(gamepad2.left_stick_y) {
             expandByTogether(//increment)
         }
         if(gamepad2.y) {
