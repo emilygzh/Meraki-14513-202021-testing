@@ -9,15 +9,18 @@ public final class DoubleReverseArm extends BaseComponent {
     public static final int MINIMUM = 0;
     public static final int MAXIMUM = 1200;
 
-    private DcMotor DoubleReverseArmMotor;
+    private DcMotor leftMotor;
+    private DcMotor rightMotor;
     //or servo
 
     @Override
     public void init() {
-        DoubleReverseArmMotor = hardwareMap.get(DcMotor.class, "DoubleReverseArm_Motor");
-        DoubleReverseArmMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        DoubleReverseArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        DoubleReverseArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotor = hardwareMap.get(DcMotor.class, "DRArm_LeftMotor");
+        rightMotor = hardwareMap.get(DcMotor.class, "DRArm_RightMotor");
+        leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("Status", "Initialized");
     }
 
@@ -35,32 +38,42 @@ public final class DoubleReverseArm extends BaseComponent {
         telemetry.addData("gamepad2.right_stick_y", gamepad2.right_stick_y);
     }
 
-    private void expandTo(int targetMotorPosition) {
-        if (targetMotorPosition < MINIMUM) {
-            targetMotorPosition = MINIMUM;
-        } else if (targetMotorPosition > MAXIMUM) {
-            targetMotorPosition = MAXIMUM;
+    private void expandTo(int targetPosition) {
+        if (targetPosition < MINIMUM) {
+            targetPosition = MINIMUM;
+        } else if (targetPosition > MAXIMUM) {
+            targetPosition = MAXIMUM;
         }
-        int realIncrement = targetMotorPosition - DoubleReverseArmMotor.getCurrentPosition();
-        if(realIncrement > 0) {
-            DoubleReverseArmMotor.setPower(1.0);
+        int leftIncrement = targetPosition - leftMotor.getCurrentPosition();
+        int rightIncrement = -leftIncrement;
+        int leftTarget = leftMotor.getCurrentPosition() + leftIncrement;
+        int rightTarget = rightMotor.getCurrentPosition() + rightIncrement;
+        leftMotor.setTargetPosition(leftTarget);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setTargetPosition(rightTarget);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if(leftIncrement > 0) {
+            leftMotor.setPower(1.0);
+            rightMotor.setPower(-1.0);
         }
-        else if (realIncrement < 0) {
-            DoubleReverseArmMotor.setPower(-1.0);
+        else if (leftIncrement < 0) {
+            leftMotor.setPower(-1.0);
+            rightMotor.setPower(1.0);
         }
         else {
-            DoubleReverseArmMotor.setPower(0.0);
+            leftMotor.setPower(0.0);
+            rightMotor.setPower(0.0);
             return;
         }
-        DoubleReverseArmMotor.setTargetPosition(targetMotorPosition);
-        DoubleReverseArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while (DoubleReverseArmMotor.isBusy()) {
-            telemetry.addData("currentPosition", DoubleReverseArmMotor.getCurrentPosition());
+
+        while (leftMotor.isBusy() || rightMotor.isBusy()) {
+
         }
-        DoubleReverseArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     private void expandBy(int i) {
+        expandTo(leftMotor.getTargetPosition()+i);
     }
 }
 
