@@ -59,7 +59,7 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
             expandBySeparate(5, false);
         }
        // expandSeparate((int)gamepad2.left_trigger*10, true);
-        //expandSeparate((int)gamepad2.right_trigger*10, false);
+        // expandSeparate((int)gamepad2.right_trigger*10, false);
 
     }
 
