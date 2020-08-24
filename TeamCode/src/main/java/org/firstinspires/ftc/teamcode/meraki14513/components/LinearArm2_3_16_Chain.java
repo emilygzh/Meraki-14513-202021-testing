@@ -35,9 +35,9 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
 
     @Override
     public void loop() {
-        if(gamepad2.left_stick_y) {
-            expandByTogether(//increment)
-        }
+       // if(gamepad2.left_stick_y) {
+          //  expandByTogether(//increment)
+        //}
         if(gamepad2.y) {
             expandToTogether(MAXIMUM)
         }
@@ -52,14 +52,14 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
         if(gamepad2.right_bumper) {
             expandBySeparate(-5, false);
         }
-        if(gamepad2.left_trigger) {
-            expandBySeparate(5, true);
-        }
-        if(gamepad2.right_trigger) {
-            expandBySeparate(5, false);
-        }
+//        if(gamepad2.left_trigger) {
+//            expandBySeparate(5, true);
+//        }
+//        if(gamepad2.right_trigger) {
+//            expandBySeparate(5, false);
+//        }
        // expandSeparate((int)gamepad2.left_trigger*10, true);
-        //expandSeparate((int)gamepad2.right_trigger*10, false);
+        // expandSeparate((int)gamepad2.right_trigger*10, false);
 
     }
 
