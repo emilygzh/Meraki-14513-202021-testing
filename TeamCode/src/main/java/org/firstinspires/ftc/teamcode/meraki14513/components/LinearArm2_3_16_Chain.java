@@ -39,10 +39,10 @@ public final class LinearArm2_3_16_Chain extends BaseComponent {
           //  expandByTogether(//increment)
         //}
         if(gamepad2.y) {
-            expandToTogether(MAXIMUM)
+            expandToTogether(MAXIMUM);
         }
         if(gamepad2.a) {
-            expandToTogether(MINIMUM)
+            expandToTogether(MINIMUM);
         }
         //expandTogether((int)gamepad2.left_stick_y * 30);
 
