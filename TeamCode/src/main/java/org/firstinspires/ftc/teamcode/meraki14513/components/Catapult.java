@@ -17,7 +17,7 @@ public class Catapult extends BaseComponent{
     public void init() {
         oneServo = hardwareMap.get(CRServo.class, "CatapultServo");
         oneServo.setDirection(CRServo.Direction.FORWARD);
-        counter = 0.0;
+        counter = MAXIMUM;
         telemetry.addData("Status", "Initialized");
     }
 
@@ -30,6 +30,7 @@ public class Catapult extends BaseComponent{
             if(gamepad2.right_stick_x < 0.0) {
                 power = -1.0;
             }
+            telemetry.addData("gamepad2.right_stick_x", gamepad2.right_stick_x);
             expandBy(power, milliseconds);
         }
         else if(gamepad2.b) {
@@ -43,24 +44,27 @@ public class Catapult extends BaseComponent{
         else {
             stop();
         }
-        telemetry.addData("gamepad2.right_stick_y", gamepad2.right_stick_y);
     }
 
     public void expandBy(double power, int milliseconds) {
-        double target = power*milliseconds;
+        double target = counter + power * milliseconds;
         if(target > MAXIMUM) {
             target = MAXIMUM;
         }
         else if(target < MINIMUM) {
             target = MINIMUM;
         }
-        milliseconds = (int)(target/power);
+        milliseconds = (int)(target / power);
+        if (milliseconds < 1) {
+            return;
+        }
+        telemetry.addData("milliseconds", milliseconds);
         ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         oneServo.setPower(power);
         while(timer.milliseconds() < milliseconds) {
             telemetry.addData("timer", timer.milliseconds());
         }
-        counter += power*milliseconds;
+        counter += power * milliseconds;
     }
 
     public void stop() {

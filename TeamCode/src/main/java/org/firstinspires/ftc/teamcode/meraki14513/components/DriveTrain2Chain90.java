@@ -42,30 +42,36 @@ public class DriveTrain2Chain90 extends BaseComponent {
             moveByTime(100, 0.0, -gamepad1.left_trigger);
         } else if (gamepad1.right_trigger > 0.0){
             moveByTime(100, gamepad1.right_trigger, 0.0);
-        } else if (gamepad1.dpad_down) {
-            moveByIncrement(scale, -scale, 1.0);
         } else if (gamepad1.dpad_up) {
+            moveByIncrement(scale, -scale, 1.0);
+        } else if (gamepad1.dpad_down) {
             moveByIncrement(-scale, scale, 1.0);
-        } else if (gamepad1.left_bumper) {
-            moveByIncrement(0, scale, 1.0);
         } else if (gamepad1.right_bumper) {
-            moveByIncrement(-scale, 0, 1.0);
+            moveByIncrement(2*scale, 0, 1.0);
+        } else if (gamepad1.left_bumper) {
+            moveByIncrement(0, -2*scale, 1.0);
         } else {
             leftDrive.setPower(0.0);
             rightDrive.setPower(0.0);
         }
     }
 
-
-
     public void moveByIncrement(int leftIncrement, int rightIncrement, double power) {
+        telemetry.addData("leftIncrement", leftIncrement);
+        telemetry.addData("rightIncrement", rightIncrement);
+        telemetry.addData("power", power);
+
         double leftPower = Math.abs(power);
         double rightPower = Math.abs(power);
         if (leftIncrement < 0) {
             leftPower = -leftPower;
+        } else if (leftIncrement == 0) {
+            leftPower = 0.0;
         }
         if (rightIncrement < 0 ){
             rightPower = -rightPower;
+        } else if(rightIncrement == 0) {
+            rightPower = 0.0;
         }
 
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -73,15 +79,16 @@ public class DriveTrain2Chain90 extends BaseComponent {
         leftDrive.setTargetPosition(leftDrive.getCurrentPosition() + leftIncrement);
         rightDrive.setTargetPosition(rightDrive.getCurrentPosition() + rightIncrement);
 
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+        telemetry.addData("LeftPosition", leftDrive.getCurrentPosition());
+        telemetry.addData("RightPosition", rightDrive.getCurrentPosition());
 
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
+
         while (leftDrive.isBusy() || rightDrive.isBusy()) {
-            telemetry.addData("LeftPosition", leftDrive.getCurrentPosition());
-            telemetry.addData("RightPosition", rightDrive.getCurrentPosition());
         }
     }
 
