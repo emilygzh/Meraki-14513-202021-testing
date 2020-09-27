@@ -12,10 +12,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 @TeleOp(name="DriveTrain4Mecanum75", group="Meraki 14513")
 public final class DriveTrain4Mecanum75 extends BaseComponent {
-    private DcMotor leftFrontDrive;
-    private DcMotor rightFrontDrive;
-    private DcMotor leftRearDrive;
-    private DcMotor rightRearDrive;
+    private DcMotor drive4_frontLeft;
+    private DcMotor drive4_frontRight;
+    private DcMotor drive4_rearLeft;
+    private DcMotor drive4_rearRight;
 
     /**
      * Constructor for FTC container
@@ -36,25 +36,25 @@ public final class DriveTrain4Mecanum75 extends BaseComponent {
      */
     @Override
     public void init() {
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "Mecanum75.leftFrontDrive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "Mecanum75.rightFrontDrive");
-        leftRearDrive = hardwareMap.get(DcMotor.class, "Mecanum75.leftRearDrive");
-        rightRearDrive = hardwareMap.get(DcMotor.class, "Mecanum75.rightRearDrive");
+        drive4_frontLeft = hardwareMap.get(DcMotor.class, "drive4_frontLeft");
+        drive4_frontRight = hardwareMap.get(DcMotor.class, "drive4_frontRight");
+        drive4_rearLeft = hardwareMap.get(DcMotor.class, "drive4_rearLeft");
+        drive4_rearRight = hardwareMap.get(DcMotor.class, "drive4_rearRight");
 
-        leftFrontDrive.setPower(0.0);
-        rightFrontDrive.setPower(0.0);
-        leftRearDrive.setPower(0.0);
-        rightRearDrive.setPower(0.0);
+        drive4_frontLeft.setPower(0.0);
+        drive4_frontRight.setPower(0.0);
+        drive4_rearLeft.setPower(0.0);
+        drive4_rearRight.setPower(0.0);
 
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        drive4_frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        drive4_frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        drive4_rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        drive4_rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftRearDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        drive4_frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        drive4_frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        drive4_rearLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        drive4_frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     /**
@@ -92,14 +92,14 @@ public final class DriveTrain4Mecanum75 extends BaseComponent {
      * @param forwardBackwardIncrement
      */
     public void move(int leftRightIncrement, int forwardBackwardIncrement) {
-        leftFrontDrive.setTargetPosition(
-                leftFrontDrive.getCurrentPosition() + forwardBackwardIncrement - leftRightIncrement);
-        rightFrontDrive.setTargetPosition(
-                rightFrontDrive.getTargetPosition() + forwardBackwardIncrement - leftRightIncrement);
-        leftRearDrive.setTargetPosition(
-                leftRearDrive.getCurrentPosition() + forwardBackwardIncrement + leftRightIncrement);
-        rightFrontDrive.setTargetPosition(
-                rightRearDrive.getCurrentPosition() + forwardBackwardIncrement + leftRightIncrement);
+        drive4_frontLeft.setTargetPosition(
+                drive4_frontLeft.getCurrentPosition() + forwardBackwardIncrement - leftRightIncrement);
+        drive4_frontRight.setTargetPosition(
+                drive4_frontRight.getTargetPosition() + forwardBackwardIncrement - leftRightIncrement);
+        drive4_rearLeft.setTargetPosition(
+                drive4_rearLeft.getCurrentPosition() + forwardBackwardIncrement + leftRightIncrement);
+        drive4_rearRight.setTargetPosition(
+                drive4_rearRight.getCurrentPosition() + forwardBackwardIncrement + leftRightIncrement);
     }
 
     /**
@@ -107,22 +107,22 @@ public final class DriveTrain4Mecanum75 extends BaseComponent {
      * @param leftRightIncrement
      */
     public void turn(int leftRightIncrement) {
-        leftFrontDrive.setTargetPosition(leftFrontDrive.getCurrentPosition() + leftRightIncrement);
-        rightFrontDrive.setTargetPosition(rightFrontDrive.getCurrentPosition() - leftRightIncrement);
-        leftRearDrive.setTargetPosition(leftRearDrive.getCurrentPosition() + leftRightIncrement);
-        rightRearDrive.setTargetPosition(rightRearDrive.getCurrentPosition() - leftRightIncrement);
+        drive4_frontLeft.setTargetPosition(drive4_frontLeft.getCurrentPosition() + leftRightIncrement);
+        drive4_frontRight.setTargetPosition(drive4_frontRight.getCurrentPosition() - leftRightIncrement);
+        drive4_rearLeft.setTargetPosition(drive4_rearLeft.getCurrentPosition() + leftRightIncrement);
+        drive4_rearRight.setTargetPosition(drive4_rearRight.getCurrentPosition() - leftRightIncrement);
     }
 
     public void moveByTime(long milliseconds,
                            double leftFrontPower, double rightFrontPower, double leftRearPower, double rightRearPower) {
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftRearDrive.setPower(leftRearPower);
-        rightRearDrive.setPower(rightRearPower);
+        drive4_frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive4_frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive4_rearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive4_rearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive4_frontLeft.setPower(leftFrontPower);
+        drive4_frontRight.setPower(rightFrontPower);
+        drive4_rearLeft.setPower(leftRearPower);
+        drive4_rearRight.setPower(rightRearPower);
         ElapsedTime millitime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         while (millitime.milliseconds() < milliseconds) {
             telemetry.addData("millitime", millitime.milliseconds());
